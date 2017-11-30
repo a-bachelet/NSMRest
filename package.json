@@ -1,0 +1,56 @@
+{
+  "name": "nodeservermonitor",
+  "version": "0.0.0",
+  "description": "A NodeJS based server monitoring App.",
+  "main": "build/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "grunt concurrent"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-bachelet/NodeServerMonitor.git"
+  },
+  "keywords": [
+    "Node",
+    "NodeJs",
+    "Server",
+    "Monitor",
+    "Monitoring",
+    "Typescript"
+  ],
+  "author": "Alexis Bachelet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/a-bachelet/NodeServerMonitor/issues"
+  },
+  "homepage": "https://github.com/a-bachelet/NodeServerMonitor#readme",
+  "devDependencies": {
+    "@types/bcrypt-nodejs": "0.0.30",
+    "@types/body-parser": "^1.16.8",
+    "@types/express": "^4.0.39",
+    "@types/helmet": "0.0.37",
+    "@types/jsonwebtoken": "^7.2.3",
+    "@types/mongoose": "^4.7.28",
+    "@types/morgan": "^1.7.35",
+    "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-nodemon": "^0.4.2",
+    "grunt-ts": "^6.0.0-beta.17",
+    "grunt-tslint": "^5.0.1",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "helmet": "^3.9.0",
+    "jsonwebtoken": "^8.1.0",
+    "mongoose": "^4.13.5",
+    "morgan": "^1.9.0"
+  }
+}
