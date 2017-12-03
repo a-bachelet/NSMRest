@@ -1,15 +1,20 @@
 /** Classes Imports */
 import Console from '../Console/Console';
+import Database from '../Database/Database';
 
 /** Dependencies Imports */
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as helmet from 'helmet';
+import * as mongodb from 'mongodb';
 import * as morgan from 'morgan';
 
 export default class HttpServer {
 
     private _console: Console;
+
+    private _database: Database;
+    private _databaseUrl: string;
 
     private _express: express.Application;
     private _expressPort: number;
@@ -17,17 +22,32 @@ export default class HttpServer {
     private _apiRouter: express.Router;
     private _webRouter: express.Router;
 
-    constructor(expressPort: number) {
+    constructor(databaseUrl: string, expressPort: number) {
         this._console = new Console();
+        this._databaseUrl = databaseUrl;
+        this._database = new Database(this._databaseUrl);
         this._express = express();
         this._expressPort = expressPort;
     }
 
-    public start(): void {
+    public async start(): Promise<any> {
         this._console.success('| (s) Welcome On NodeServerMonitor !' + '\n');
-        this.init();
+        await this.init();
         this._express.listen(this._expressPort, () => {
-            this._console.success('| (s) Server is listening on port -> ' + this._expressPort);
+            this._console.info('| (i) Server is listening on port -> ' + this._expressPort);
+        });
+    }
+
+    private initDatabase(): Promise<null> {
+        return new Promise((resolve) => {
+            this._console.action('|      -> Database initialization...');
+            this._database.connect().then(() => {
+                this._console.action('|      -> Database initialized !' + '\n');
+                resolve(null);
+            }).catch((err: mongodb.MongoError) => {
+                this._console.error('|      -> ERROR : ' + err.message);
+                process.exit(0);
+            });
         });
     }
 
@@ -59,8 +79,9 @@ export default class HttpServer {
         this._console.action('|      -> Middlewares initialized !' + '\n');
     }
 
-    private init(): void {
+    private async init(): Promise<any> {
         this._console.info('| (i) Initialization started...' + '\n');
+        await this.initDatabase();
         this.initRouters();
         this.initControllers();
         this.initMiddlewares();
