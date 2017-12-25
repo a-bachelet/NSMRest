@@ -1,5 +1,12 @@
+## NODE_MODULES FOLDER
 /node_modules
-/.sass-cache
-/.tscache
-/build
+
+## EDITOR CONFIG FOLDERS
+/.idea
 /.vscode
+
+## COMPILED FILES FOLDER
+/dist
+
+## TEMP FILES FOLDER
+/.tscache

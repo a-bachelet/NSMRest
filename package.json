@@ -4,8 +4,9 @@
   "description": "A NodeJS based server monitoring App.",
   "main": "build/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "grunt concurrent"
+    "build": "grunt build",
+    "dev": "grunt concurrent",
+    "prod": "node dist/app.js"
   },
   "repository": {
     "type": "git",

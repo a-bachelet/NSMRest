@@ -1,8 +1,6 @@
 module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-concurrent');
-    grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-ts');
@@ -29,33 +27,10 @@ module.exports = function (grunt) {
                 tsconfig: true
             }
         },
-
-        sass: {
-            options: {
-                sourcemap: 'none'
-            },
-            build: {
-                files: [{
-                    expand: true,
-                    cwd: './src/public/styles',
-                    src: ['./*.scss'],
-                    dest: './build/public/styles/',
-                    ext: '.css'
-                }]
-            }
-        },
-
-        copy: {
-            build: {
-                files: [
-                    { expand: true, cwd: './src', src: ['./views/**/*.hbs'], dest: './build/', filter: 'isFile' }
-                ]
-            }
-        },
         
         nodemon: {
             dev: {
-                script: './build/app.js'
+                script: './dist/app.js'
             }
         },
 
@@ -66,7 +41,7 @@ module.exports = function (grunt) {
             },
             build: {
                 files: ['src/**/*.*'],
-                tasks: ['default']
+                tasks: ['build']
             }
         },
 
@@ -79,6 +54,6 @@ module.exports = function (grunt) {
 
     });
 
-    grunt.registerTask('default', ['tslint', 'ts', 'sass', 'copy']);
+    grunt.registerTask('build', ['tslint', 'ts']);
 
 };
