@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
-    "outDir": "./build/",
+    "outDir": "./dist/",
     "rootDir": "./src/",
     "removeComments": true,
     "strict": true,
@@ -12,7 +12,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",            
     "rootDirs": ["./src"],
