@@ -9,6 +9,13 @@ import * as helmet from 'helmet';
 import * as mongodb from 'mongodb';
 import * as morgan from 'morgan';
 
+/** Constants Imports */
+import { CONTROLLERS } from '../Constants/CONTROLLERS';
+
+/** Interfaces */
+import IController from '../Interfaces/IController';
+import IRoute from '../Interfaces/IRoute';
+
 export default class HttpServer {
 
     private _console: Console;
@@ -64,6 +71,10 @@ export default class HttpServer {
 
     private initControllers(): void {
         this._console.action('|      -> Controllers initialization...');
+        CONTROLLERS.forEach((controller: IController) => {
+            this.loadController(controller);
+            this._console.success('|         -> ' + controller.constructor.name + ' successfully loaded !');
+        });
         this._console.action('|      -> Controllers initialized !' + '\n');
     }
 
@@ -86,6 +97,19 @@ export default class HttpServer {
         this.initControllers();
         this.initMiddlewares();
         this._console.success('| (s) Server successfully initialized !' + '\n');
+    }
+
+    private loadController(controller: IController): void {
+        controller.getRoutes().forEach((route: IRoute) => {
+            this.addRoute(controller.controllerPath, route);
+        });
+    }
+
+    private addRoute(path: string, route: IRoute): void {
+        this._express[route.method.toLowerCase()](
+            path + route.path,
+            route.middlewares ? [...route.middlewares, route.callable] : route.callable
+        );
     }
 
 }

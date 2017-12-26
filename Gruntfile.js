@@ -21,7 +21,8 @@ module.exports = function (grunt) {
 
         ts: {
             options: {
-                sourceMap: false
+                sourceMap: false,
+                suppressImplicitAnyIndexErrors: true
             },
             build: {
                 tsconfig: true
