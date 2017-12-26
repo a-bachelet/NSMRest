@@ -45,7 +45,8 @@
         "no-unused-expression": true,
         "eofline": true,
         "trailing-comma": [true, {"singleline": "never", "multiline": "never"}],
-        "align": [true, "parameters", "statements"]
+        "align": [true, "parameters", "statements"],
+        "no-string-literal": false
       },
     "rulesDirectory": []
 }
