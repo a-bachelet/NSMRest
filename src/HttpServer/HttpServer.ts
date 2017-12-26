@@ -72,7 +72,9 @@ export default class HttpServer {
     private initControllers(): void {
         this._console.action('|      -> Controllers initialization...');
         CONTROLLERS.forEach((controller: IController) => {
-            this.loadController(controller);
+            controller.getRoutes().forEach((route: IRoute) => {
+                this.addRoute(controller.controllerPath, route);
+            });
             this._console.success('|         -> ' + controller.constructor.name + ' successfully loaded !');
         });
         this._console.action('|      -> Controllers initialized !' + '\n');
@@ -93,16 +95,10 @@ export default class HttpServer {
     private async init(): Promise<any> {
         this._console.info('| (i) Initialization started...' + '\n');
         await this.initDatabase();
+        this.initMiddlewares();
         this.initRouters();
         this.initControllers();
-        this.initMiddlewares();
         this._console.success('| (s) Server successfully initialized !' + '\n');
-    }
-
-    private loadController(controller: IController): void {
-        controller.getRoutes().forEach((route: IRoute) => {
-            this.addRoute(controller.controllerPath, route);
-        });
     }
 
     private addRoute(path: string, route: IRoute): void {
