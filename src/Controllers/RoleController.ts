@@ -8,16 +8,19 @@ import IRoute from '../Interfaces/IRoute';
 /** Entities Imports */
 import Role, { IRole } from '../Entities/Role';
 
+/** Middlewares Imports */
+import AuthMiddleware from '../Middlewares/AuthMiddleware';
+
 export default class RoleController implements IController {
 
     public controllerPath: string = '/roles';
 
     private routes: IRoute[] = [
-        { method: 'GET', path: '/', callable: this.getAll },
-        { method: 'GET', path: '/:id', callable: this.getById },
-        { method: 'POST', path: '/', callable: this.create },
-        { method: 'POST', path: '/:id', callable: this.updateById },
-        { method: 'DELETE', path: '/:id', callable: this.removeById }
+        { method: 'GET', path: '/', callable: this.getAll, middlewares: [AuthMiddleware] },
+        { method: 'GET', path: '/:id', callable: this.getById, middlewares: [AuthMiddleware] },
+        { method: 'POST', path: '/', callable: this.create, middlewares: [AuthMiddleware] },
+        { method: 'POST', path: '/:id', callable: this.updateById, middlewares: [AuthMiddleware] },
+        { method: 'DELETE', path: '/:id', callable: this.removeById, middlewares: [AuthMiddleware] }
     ];
 
     public getRoutes(): IRoute[] {
