@@ -41,17 +41,18 @@ export default class AuthController implements IController {
                                 {},
                                 process.env.JWT_SECRET || 'ILOVESECRETAPIS !',
                                 { expiresIn: 3600 },
-                                (tokenErr: any, token: string) => {
+                                (tokenErr: any, loginToken: string) => {
                                     if (tokenErr) {
                                         res.status(500).send({ success: false, message: 'Internal server error.' });
                                     } else {
-                                        user.update({ loginToken: token }, (errUpdate: any) => {
+                                        const validUntil: Date = new Date((new Date()).getTime() + 20000);
+                                        user.update({ loginToken, validUntil }, (errUpdate: any) => {
                                             if (errUpdate) {
                                                 res.status(500).send(
                                                     { success: false, message: 'Internal server error.' }
                                                 );
                                             } else {
-                                                res.status(200).send({ success: true, token });
+                                                res.status(200).send({ success: true, loginToken });
                                             }
                                         });
                                     }
@@ -68,7 +69,7 @@ export default class AuthController implements IController {
         const loginToken = req.headers['x-access-token'];
         User.findOneAndUpdate(
             { loginToken },
-            { loginToken: null },
+            { loginToken: null, validUntil: null },
             {},
             (err: any, user: IUser | null) => {
                 if (err) {
