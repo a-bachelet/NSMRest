@@ -27,7 +27,6 @@ export default class HttpServer {
     private _expressPort: number;
 
     private _apiRouter: express.Router;
-    private _webRouter: express.Router;
 
     constructor(databaseUrl: string, expressPort: number) {
         this._console = new Console();
@@ -61,11 +60,8 @@ export default class HttpServer {
     private initRouters(): void {
         this._console.action('|      -> Routers initialization...');
         this._apiRouter = express.Router();
-        this._webRouter = express.Router();
         this._express.use('/api', this._apiRouter);
         this._console.success('|            -> API Router loaded !');
-        this._express.use('/web', this._webRouter);
-        this._console.success('|            -> WEB Router loaded !');
         this._console.action('|      -> Routers initialized !' + '\n');
     }
 
@@ -102,7 +98,7 @@ export default class HttpServer {
     }
 
     private addRoute(path: string, route: IRoute): void {
-        this._express[route.method.toLowerCase()](
+        this._apiRouter[route.method.toLowerCase()](
             path + route.path,
             route.middlewares ? [...route.middlewares, route.callable] : route.callable
         );
