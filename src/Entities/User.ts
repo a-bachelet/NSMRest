@@ -11,7 +11,6 @@ export interface IUser extends mongoose.Document {
     password?: string;
     role?: IRole;
     createdAt?: Date;
-    updatedAt?: Date;
     loginToken?: string;
 }
 
@@ -49,9 +48,6 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: new Date()
-    },
-    updatedAt: {
-        type: Date
     },
     loginToken: {
         type: String,
