@@ -7,15 +7,18 @@ import * as os from 'os';
 import IController from '../Interfaces/IController';
 import IRoute from '../Interfaces/IRoute';
 
+/** Middlewares Imports */
+import AuthMiddleware from '../Middlewares/AuthMiddleware';
+
 export default class SystemController implements IController {
 
     public controllerPath: string = '/system';
 
     private routes: IRoute[] = [
-        { method: 'GET', path: '/common', callable: this.getCommon },
-        { method: 'GET', path: '/cpus', callable: this.getCpus },
-        { method: 'GET', path: '/disks', callable: this.getDisks },
-        { method: 'GET', path: '/networks', callable: this.getNetworks }
+        { method: 'GET', path: '/common', callable: this.getCommon, middlewares: [AuthMiddleware] },
+        { method: 'GET', path: '/cpus', callable: this.getCpus, middlewares: [AuthMiddleware] },
+        { method: 'GET', path: '/disks', callable: this.getDisks, middlewares: [AuthMiddleware] },
+        { method: 'GET', path: '/networks', callable: this.getNetworks, middlewares: [AuthMiddleware] }
     ];
 
     public getRoutes(): IRoute[] {
