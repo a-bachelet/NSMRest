@@ -24,7 +24,30 @@ const AuthMiddleware: (req: express.Request, res: express.Response, nex: express
                                 if (errToken) {
                                     res.status(401).send({ success: false, message: 'Invalid token.' });
                                 } else {
-                                    next();
+                                    if (!user.validUntil) {
+                                        res.status(401).send({ success: false, message: 'Expired token.' });
+                                    } else {
+                                        const validUntimTimestamp: number = user.validUntil.getTime();
+                                        const newTimestamp: number = (new Date()).getTime();
+                                        if (validUntimTimestamp < newTimestamp) {
+                                            res.status(401).send({ success: false, message: 'Expired token.' });
+                                        } else {
+                                            User.update(
+                                                user,
+                                                { validUntil: new Date(newTimestamp + 20000) },
+                                                (errUpdate: any, userUpdate: IUser) => {
+                                                    if (errUpdate) {
+                                                        res.status(500).send({
+                                                            success: false,
+                                                            message: 'Internal server error.'
+                                                        });
+                                                    } else {
+                                                        next();
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }
                                 }
                             }
                         );
