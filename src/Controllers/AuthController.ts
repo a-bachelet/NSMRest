@@ -66,13 +66,18 @@ export default class AuthController implements IController {
 
     public logout(req: express.Request, res: express.Response): void {
         const loginToken = req.headers['x-access-token'];
-        User.findOneAndUpdate({ loginToken }, { loginToken: null }, (err: any, user: IUser) => {
-            if (err) {
-                res.status(500).send({ success: false, message: 'Internal server error.' });
-            } else {
-                res.status(204).send({ success: true, message: 'Successfull logout.' });
+        User.findOneAndUpdate(
+            { loginToken },
+            { loginToken: null },
+            {},
+            (err: any, user: IUser | null) => {
+                if (err) {
+                    res.status(500).send({ success: false, message: 'Internal server error.' });
+                } else {
+                    res.status(204).send({ success: true, message: 'Successfull logout.' });
+                }
             }
-        });
+        );
     }
 
 }
