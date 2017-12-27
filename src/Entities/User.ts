@@ -12,6 +12,7 @@ export interface IUser extends mongoose.Document {
     role?: IRole;
     createdAt?: Date;
     loginToken?: string;
+    validUntil?: Date;
 }
 
 export const UserSchema: mongoose.Schema = new mongoose.Schema({
@@ -54,6 +55,9 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
         unique: true,
         sparse: true,
         index: true
+    },
+    validUntil: {
+        type: Date
     }
 });
 
