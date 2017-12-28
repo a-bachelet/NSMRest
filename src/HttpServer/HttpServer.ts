@@ -1,11 +1,13 @@
 /** Classes Imports */
 import Console from '../Console/Console';
 import Database from '../Database/Database';
+import Socket from '../Socket/Socket';
 
 /** Dependencies Imports */
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as helmet from 'helmet';
+import { Server } from 'http';
 import * as mongodb from 'mongodb';
 import * as morgan from 'morgan';
 
@@ -28,6 +30,8 @@ export default class HttpServer {
 
     private _apiRouter: express.Router;
 
+    private _socket: Socket;
+
     constructor(databaseUrl: string, expressPort: number) {
         this._console = new Console();
         this._databaseUrl = databaseUrl;
@@ -39,9 +43,15 @@ export default class HttpServer {
     public async start(): Promise<any> {
         this._console.success('| (s) Welcome On NodeServerMonitor !' + '\n');
         await this.init();
-        this._express.listen(this._expressPort, () => {
-            this._console.info('| (i) Server is listening on port -> ' + this._expressPort);
+        const server: Server = this._express.listen(this._expressPort, () => {
+            this._console.info('| (i) Express Server & SocketIO Server are listening on port -> '
+                    + this._expressPort
+                    + '\n'
+                );
         });
+        /** SocketIO Server Initialisation */
+        this._socket = new Socket(server);
+        this._socket.start();
     }
 
     private initDatabase(): Promise<null> {
@@ -89,12 +99,12 @@ export default class HttpServer {
     }
 
     private async init(): Promise<any> {
-        this._console.info('| (i) Initialization started...' + '\n');
+        this._console.info('| (i) Express Server Initialization started...' + '\n');
         await this.initDatabase();
         this.initMiddlewares();
         this.initRouters();
         this.initControllers();
-        this._console.success('| (s) Server successfully initialized !' + '\n');
+        this._console.success('| (s) Express Server successfully initialized !' + '\n');
     }
 
     private addRoute(path: string, route: IRoute): void {
