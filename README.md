@@ -1,1 +1,1 @@
-NodeServerMonitor
+NSMRest
