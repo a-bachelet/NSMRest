@@ -40,12 +40,11 @@ export default class AuthController implements IController {
                             jwt.sign(
                                 {},
                                 process.env.JWT_SECRET || 'ILOVESECRETAPIS !',
-                                { expiresIn: 3600 },
                                 (tokenErr: any, loginToken: string) => {
                                     if (tokenErr) {
                                         res.status(500).send({ success: false, message: 'Internal server error.' });
                                     } else {
-                                        const validUntil: Date = new Date((new Date()).getTime() + 20000);
+                                        const validUntil: Date = new Date((new Date()).getTime() + 3600000);
                                         user.update({ loginToken, validUntil }, (errUpdate: any) => {
                                             if (errUpdate) {
                                                 res.status(500).send(
