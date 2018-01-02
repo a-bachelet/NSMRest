@@ -34,7 +34,7 @@ const AuthMiddleware: (req: express.Request, res: express.Response, nex: express
                                         } else {
                                             User.update(
                                                 user,
-                                                { validUntil: new Date(newTimestamp + 20000) },
+                                                { validUntil: new Date(newTimestamp + 3600000) },
                                                 (errUpdate: any, userUpdate: IUser) => {
                                                     if (errUpdate) {
                                                         res.status(500).send({
