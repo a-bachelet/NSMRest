@@ -45,15 +45,19 @@ export default class AuthController implements IController {
                                         res.status(500).send({ success: false, message: 'Internal server error.' });
                                     } else {
                                         const validUntil: Date = new Date((new Date()).getTime() + 3600000);
-                                        user.update({ loginToken, validUntil }, (errUpdate: any) => {
-                                            if (errUpdate) {
-                                                res.status(500).send(
-                                                    { success: false, message: 'Internal server error.' }
-                                                );
-                                            } else {
-                                                res.status(200).send({ success: true, loginToken });
+                                        user.update({ loginToken, validUntil }).populate('role').exec(
+                                            (errUpdate: any) => {
+                                                if (errUpdate) {
+                                                    res.status(500).send(
+                                                        { success: false, message: 'Internal server error.' }
+                                                    );
+                                                } else {
+                                                    user.loginToken = loginToken;
+                                                    user.validUntil = validUntil;
+                                                    res.status(200).send({ success: true, user });
+                                                }
                                             }
-                                        });
+                                        );
                                     }
                                 }
                             );
