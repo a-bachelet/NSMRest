@@ -43,24 +43,46 @@ export default class Socket {
                         totalMem: os.totalmem(),
                         freeMem: os.freemem()
                     });
-                }, 4000);
+                }, 1000);
             });
 
             client.on('stopMemory', () => {
                 clearInterval(memoryInterval);
-                this._console.info('| (i) SocketIO : ' + client.client.id + ' -> Start Emiting Memory Info');
+                this._console.info('| (i) SocketIO : ' + client.client.id + ' -> Stop Emiting Memory Info');
             });
 
             client.on('cpu', () => {
                 this._console.info('| (i) SocketIO : ' + client.client.id + ' -> Start Emiting Cpu Info');
+                const getPercentage = (): any => {
+                    const cpus = os.cpus();
+                    const result: any = {};
+                    cpus.forEach((cpu) => {
+                        {
+                            let total = 0;
+
+                            for (const obj in cpu.times) {
+                                if (obj) {
+                                    total += cpu.times[obj];
+                                }
+                            }
+
+                            for (const obj in cpu.times) {
+                                if (obj) {
+                                    result[obj] = Math.round(100 * cpu.times[obj] / total);
+                                }
+                            }
+                        }
+                    });
+                    return result;
+                };
                 client.emit('cpu', {
-                    cpu: os.cpus()
+                    cpu: getPercentage()
                 });
                 cpuInterval = setInterval(() => {
                     client.emit('cpu', {
-                        cpu: os.cpus()
+                        cpu: getPercentage()
                     });
-                }, 4000);
+                }, 1000);
             });
 
             client.on('stopCpu', () => {
