@@ -1,5 +1,5 @@
 /** Dependencies Imports */
-import * as diskinfo from 'diskinfo';
+import * as drivelist from 'drivelist';
 import * as express from 'express';
 import * as os from 'os';
 
@@ -52,11 +52,12 @@ export default class SystemController implements IController {
     }
 
     private getDisks(req: express.Request, res: express.Response): void {
-        diskinfo.getDrives((err: any, disks: any[]) => {
-            res.status(200).send({
-                success: true,
-                disks
-            });
+        drivelist.list((err: any, drives: any) => {
+            if (err) {
+                res.status(500).send({ success: false, message: 'Internal Server Error.' });
+            } else {
+                res.status(200).send({ success: true, disks: drives });
+            }
         });
     }
 
