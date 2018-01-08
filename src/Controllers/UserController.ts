@@ -88,6 +88,10 @@ export default class UserController implements IController {
 
     public updateById(req: express.Request, res: express.Response): void {
         delete req.body.password;
+        delete req.body.loginToken;
+        delete req.body.createdAt;
+        delete req.body.validUntil;
+        console.log(req.body);
         User.findByIdAndUpdate(req.params.id, req.body)
             .populate('role')
             .exec((err: any, user: IUser) => {
