@@ -1,5 +1,5 @@
 /** Dependencies Imports */
-import * as drivelist from 'drivelist';
+const drivelist = require('drivelist');
 import * as express from 'express';
 import * as os from 'os';
 
@@ -53,6 +53,7 @@ export default class SystemController implements IController {
 
     private getDisks(req: express.Request, res: express.Response): void {
         drivelist.list((err: any, drives: any) => {
+            console.log(err);
             if (err) {
                 res.status(500).send({ success: false, message: 'Internal Server Error.' });
             } else {

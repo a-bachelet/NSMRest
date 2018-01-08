@@ -52,6 +52,7 @@ export default class RoleController implements IController {
     }
 
     private create(req: express.Request, res: express.Response): void {
+        delete req.body.createdAt;
         Role.create(req.body, (err: any, role: IRole) => {
             if (err) {
                 res.status(400).send({ success: false, message: 'An error occured.', error: err });
